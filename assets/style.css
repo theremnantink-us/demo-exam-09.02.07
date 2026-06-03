@@ -1,0 +1,148 @@
+/* ============================================================================
+   style.css — общие стили. Чёрно-белая тёмная палитра (нейтральная, не «шаблонная»).
+   🔧 Вся тема в переменных ниже — меняешь их и весь сайт перекрашивается.
+   В конце файла — адаптив под смартфон 390x844 и анимации.
+   ========================================================================== */
+:root {
+    --accent: #e8e8e8;        /* 🔧 светлый «акцент»: кнопки, ссылки, бренд */
+    --accent-dark: #ffffff;   /* ярче при наведении */
+    --accent-text: #111111;   /* текст на светлых кнопках */
+    --bg: #0e0e0e;            /* фон страницы */
+    --surface: #1a1a1a;       /* карточки, шапка, таблицы */
+    --surface-2: #242424;     /* шапка таблицы, ховер */
+    --text: #ececec;          /* основной текст */
+    --muted: #8a8a8a;         /* приглушённый текст */
+    --border: #333333;        /* рамки */
+    --ok: #f0f0f0;            /* «выполнено» (в ЧБ — самый светлый) */
+    --warn: #b8b8b8;          /* «в работе» */
+    --err: #cfcfcf;           /* текст ошибок (читаемо на тёмном) */
+    --radius: 12px;
+    font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+/* --- Шапка --- */
+.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; background: var(--surface); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 10;
+}
+.brand { font-weight: 700; font-size: 20px; color: var(--accent); text-decoration: none; }
+.nav { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.nav a { color: var(--text); text-decoration: none; transition: color .2s; }
+.nav a:hover { color: var(--accent); }
+.nav-user { color: var(--muted); font-size: 14px; }
+
+/* --- Контейнер и карточки --- */
+.container { max-width: 1000px; margin: 28px auto; padding: 0 16px; }
+.card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px; max-width: 460px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px;
+}
+/* Обёртка для страниц с одной формой (вход/регистрация/заявка): всё по центру и ровно */
+.auth { max-width: 460px; margin: 0 auto; }
+.auth h1 { text-align: center; }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.row-between h1 { margin: 0; }
+h1 { font-size: 26px; margin: 0 0 6px; }
+
+/* «Отличительная черта раздела»: иконка в заголовке + подпись-пояснение.
+   Иконка и текст подписи у каждой страницы свои — это и есть отличие разделов. */
+h1 .sec-ico { margin-right: 8px; opacity: .9; }
+.section-caption { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+.auth .section-caption { text-align: center; }
+
+/* --- Формы --- */
+label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
+label.checkbox { flex-direction: row; align-items: center; gap: 8px; font-weight: 400; }
+input, select {
+    padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 15px; font-family: inherit; transition: border-color .2s, box-shadow .2s;
+}
+input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,255,255,.12); }
+/* поля ввода на тёмном фоне */
+input, select { background: var(--surface-2); color: var(--text); }
+
+button, .btn {
+    background: var(--accent); color: var(--accent-text); border: none; padding: 11px 18px;
+    border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;
+    text-decoration: none; display: inline-block; transition: background .2s, transform .1s;
+}
+button:hover, .btn:hover { background: var(--accent-dark); }
+button:active, .btn:active { transform: scale(.97); }
+/* В форме-карточке кнопка во всю ширину — выглядит ровно */
+.card button { width: 100%; margin-top: 4px; }
+
+/* --- Сообщения --- */
+.err   { color: var(--err); font-size: 13px; font-weight: 400; }
+.alert { background: #2a2a2a; color: #fff; border: 1px solid #4a4a4a; border-left: 3px solid #fff; padding: 10px 12px; border-radius: 8px; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+
+/* --- Таблицы --- */
+.table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
+.table th, .table td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+.table tr:last-child td { border-bottom: none; }
+.table th { background: var(--surface-2); font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+.table tr:hover td { background: var(--surface-2); }
+
+/* --- Бейджи статусов (в ЧБ различаются яркостью фона) --- */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
+.badge-new      { background: #2a2a2a; color: #cfcfcf; }
+.badge-in_work  { background: #4a4a4a; color: #f0f0f0; }
+.badge-done     { background: #f0f0f0; color: #111; }            /* «выполнено» — инверсия, выделяется */
+.badge-canceled { background: #161616; color: #777; text-decoration: line-through; }
+
+.status-form { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.status-form select, .status-form input { padding: 6px 8px; font-size: 13px; }
+.status-form button { padding: 6px 12px; font-size: 13px; }
+
+.footer { text-align: center; color: var(--muted); padding: 24px; font-size: 13px; }
+
+/* ============================================================================
+   АНИМАЦИИ (Модуль 3: «предусмотрите анимацию для улучшения UX»)
+   ========================================================================== */
+.fade-in { animation: fadeIn .4s ease both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Плавное появление строк таблицы (лёгкий каскад по первым строкам) */
+.table tbody tr { animation: rowIn .35s ease both; }
+.table tbody tr:nth-child(1) { animation-delay: .02s; }
+.table tbody tr:nth-child(2) { animation-delay: .06s; }
+.table tbody tr:nth-child(3) { animation-delay: .10s; }
+.table tbody tr:nth-child(4) { animation-delay: .14s; }
+.table tbody tr:nth-child(5) { animation-delay: .18s; }
+@keyframes rowIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
+
+/* Мягкая «подсветка» строки таблицы при наведении */
+.table tbody tr { transition: background .15s; }
+
+/* Появление поля «Иная услуга» (класс ставится из app.js) */
+.reveal { animation: revealField .25s ease both; }
+@keyframes revealField { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* Уважаем системную настройку «уменьшить движение» */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ============================================================================
+   АДАПТИВ под смартфон (Модуль 2/3: экран 390x844 px).
+   На узких экранах таблицы превращаются в «карточки», навигация сжимается.
+   ========================================================================== */
+@media (max-width: 600px) {
+    .topbar { flex-direction: column; gap: 10px; padding: 12px; }
+    .nav { gap: 12px; font-size: 14px; }
+    .container { margin: 16px auto; }
+    .card { padding: 16px; max-width: 100%; }
+    h1 { font-size: 22px; }
+
+    /* Таблица -> карточки: каждая строка отдельным блоком, ячейки с подписями */
+    .table thead { display: none; }
+    .table, .table tbody, .table tr, .table td { display: block; width: 100%; }
+    .table tr { margin-bottom: 12px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .table td { border: none; border-bottom: 1px solid var(--border); }
+    .table td::before { content: attr(data-label); display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; }
+}

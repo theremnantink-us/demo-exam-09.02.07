@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мобильные макеты 390×844 — обзор</title>
+<!--
+  ============================================================================
+  mockups.html — ОБЗОРНАЯ страница: показывает все мобильные макеты рядом.
+  Сами макеты — отдельные файлы (требование задания «отдельный файл на страницу»):
+     register.html · login.html · cabinet.html · order.html · admin.html
+  Каждый открывается и самостоятельно (это полноценная страница 390×844).
+  ============================================================================
+-->
+<style>
+    body { margin:0; background:#070707; color:#ccc; font-family:'Segoe UI',system-ui,Arial,sans-serif; padding:24px; }
+    h1 { font-size:20px; font-weight:600; }
+    .grid { display:flex; flex-wrap:wrap; gap:28px; justify-content:center; margin-top:20px; }
+    figure { margin:0; text-align:center; }
+    figcaption { font-size:13px; color:#888; margin-bottom:8px; }
+    .frame { width:390px; height:844px; border:10px solid #1c1f26; border-radius:34px; overflow:hidden; box-shadow:0 12px 30px rgba(0,0,0,.4); }
+    iframe { width:390px; height:844px; border:none; display:block; }
+    a { color:#bbb; }
+</style>
+</head>
+<body>
+    <h1>Мобильные макеты (390×844) — обзор всех экранов</h1>
+    <p>Открыть отдельно:
+        <a href="register.html">register</a> ·
+        <a href="login.html">login</a> ·
+        <a href="cabinet.html">cabinet</a> ·
+        <a href="order.html">order</a> ·
+        <a href="admin.html">admin</a>
+    </p>
+    <div class="grid">
+        <figure><figcaption>Регистрация</figcaption><div class="frame"><iframe src="register.html"></iframe></div></figure>
+        <figure><figcaption>Вход</figcaption><div class="frame"><iframe src="login.html"></iframe></div></figure>
+        <figure><figcaption>Кабинет</figcaption><div class="frame"><iframe src="cabinet.html"></iframe></div></figure>
+        <figure><figcaption>Новая заявка</figcaption><div class="frame"><iframe src="order.html"></iframe></div></figure>
+        <figure><figcaption>Админ-панель</figcaption><div class="frame"><iframe src="admin.html"></iframe></div></figure>
+    </div>
+</body>
+</html>
