@@ -55,12 +55,23 @@ erDiagram
 
 ## Если на экзамене требуют именно ERwin
 Родной формат ERwin (`.erwin`/`.er1`) — закрытый бинарный, его нельзя подготовить
-заранее текстом, только в самой программе ERwin. Но схема тривиальная (3 таблицы),
-собирается за ~5 минут:
+заранее текстом, только в самой программе ERwin. НО есть быстрый способ — ERwin
+сам построит модель из SQL-скрипта (**обратное проектирование / Reverse Engineer**).
+
+### Способ А (быстрый) — построить модель из готового файла
+В репозитории лежит специальный ASCII-файл: **`sql/erwin_reverse.sql`** (без кириллицы,
+именно так, чтобы ERwin его прочитал — он импортирует только ANSI/ASCII-скрипты).
+1. ERwin → **Actions → Reverse Engineer**.
+2. New model type: **Logical/Physical**, Target DBMS: **MySQL** → Next.
+3. Reverse Engineer From: **Script** → **Browse** → выбери `sql/erwin_reverse.sql` → Next/Finish.
+4. ERwin сам нарисует `users`, `services`, `orders` со связями. Сохрани → получишь `.erwin`.
+
+> Если модель получилась **пустой** — значит файл прочитался как Unicode. Открой
+> `erwin_reverse.sql` в Блокноте → «Сохранить как» → кодировка **ANSI** → импортируй снова.
+> Reverse Engineer работает только в **пустую** модель (не в ту, где уже есть таблицы).
+
+### Способ Б (вручную, ~5 минут)
 1. ERwin → New Model → Logical/Physical, СУБД: MySQL.
-2. Создай 3 сущности: `users`, `services`, `orders` с полями из схемы выше.
-   PK — `id` (Primary Key), типы как в `database.sql`.
-3. Проведи связи (Identifying/Non-Identifying relationship):
-   `users → orders` (1:M) и `services → orders` (1:M).
-4. Сохрани модель (`Файл → Сохранить`) — получишь нужный `.erwin`-файл.
-Изображение `ER.png` используй как образец, чтобы не сверяться с кодом.
+2. Создай 3 сущности `users`, `services`, `orders` с полями из схемы выше (PK — `id`).
+3. Проведи связи: `users → orders` (1:M) и `services → orders` (1:M).
+4. Сохрани модель — получишь `.erwin`-файл. Образец — `ER.png`.
