@@ -15,9 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $login    = sanitize($_POST['login'] ?? '');
         $password = (string)($_POST['password'] ?? '');
-        $admin = app('admin');
-        // hash_equals — сравнение без утечки по времени
-        if (hash_equals($admin['login'], $login) && hash_equals($admin['password'], $password)) {
+        // Логин и пароль администратора (из задания). hash_equals — сравнение без утечки по времени.
+        if (hash_equals('Admin', $login) && hash_equals('KorokNET', $password)) {
             login_admin();
             header('Location: admin.php');
             exit;

@@ -1,19 +1,17 @@
 <?php
-/* ============================================================================
-   layout.php — общая шапка/подвал. Внешний вид берётся из theme.php:
-   цвета подставляются в CSS-переменные, подключаются шрифты (Google + фолбэк).
-   Использование:
-       layout_header('Заголовок', '🔑', 'Подпись раздела');
-       ... контент ...
-       layout_footer();
-   ========================================================================== */
+/* ----------------------------------------------------------------------------
+   layout.php — общая шапка и подвал сайта (чтобы не повторять на каждой странице).
+   ИНСТРУКЦИЯ (удали после настройки):
+     • Название сайта «Корочки.есть» — меняешь во всех местах этого файла.
+     • Шрифты подключены ссылкой Google Fonts в <head> (на экзамене без интернета
+       можно скачать .woff2 и подключить локально). Цвета — в assets/style.css.
+     • Контакты в подвале (телефон/почта/адрес) — поменяй на свои.
+---------------------------------------------------------------------------- */
 require_once __DIR__ . '/auth.php';
 
 function layout_header(string $title, string $icon = '', string $caption = ''): void {
-    $u = current_user();
-    $c = theme('colors');
-    $f = theme('fonts');
-    $cur = basename($_SERVER['PHP_SELF'] ?? '');           // текущая страница (для active)
+    $u   = current_user();
+    $cur = basename($_SERVER['PHP_SELF'] ?? '');           // текущая страница (для подсветки пункта)
     $act = fn(string $p) => $cur === $p ? ' class="active"' : '';
     ?>
 <!DOCTYPE html>
@@ -21,49 +19,23 @@ function layout_header(string $title, string $icon = '', string $caption = ''): 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($title) ?> — <?= e(theme('site_name')) ?></title>
-
-    <?php /* Шрифты: Google-ссылка (если есть интернет) + локальный фолбэк из theme */ ?>
-    <?php if (!empty($f['google_link'])): ?>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="<?= e($f['google_link']) ?>" rel="stylesheet">
-    <?php endif; ?>
-    <?php if (!empty($f['local_faces'])): ?><style><?= $f['local_faces'] ?></style><?php endif; ?>
-
-    <?php /* Цвета темы -> CSS-переменные. Меняешь theme.php — меняется весь сайт. */ ?>
-    <style>
-        :root {
-            --accent: <?= e($c['accent']) ?>;
-            --accent-2: <?= e($c['accent_2']) ?>;
-            --bg: <?= e($c['bg']) ?>;
-            --surface: <?= e($c['surface']) ?>;
-            --surface-2: <?= e($c['surface_2']) ?>;
-            --text: <?= e($c['text']) ?>;
-            --muted: <?= e($c['muted']) ?>;
-            --border: <?= e($c['border']) ?>;
-            --font-heading: <?= $f['heading'] ?>;
-            --font-body: <?= $f['body'] ?>;
-        }
-    </style>
+    <title><?= e($title) ?> — Корочки.есть</title>
+    <!-- Шрифты сайта: Manrope (заголовки) + Inter (текст) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <header class="topbar">
-    <a class="brand" href="index.php">
-        <?php if (theme('logo_img')): ?>
-            <img src="<?= e(theme('logo_img')) ?>" alt="<?= e(theme('site_name')) ?>" class="logo-img">
-        <?php else: ?>
-            <span class="logo-text"><?= e(theme('logo_text')) ?></span>
-        <?php endif; ?>
-    </a>
+    <a class="brand" href="index.php"><span class="logo-text">Корочки.есть</span></a>
     <nav class="nav">
         <div class="nav-links">
             <a href="index.php"<?= $act('index.php') ?>>Главная</a>
             <a href="index.php#reviews">Отзывы</a>
             <?php if ($u): ?>
                 <a href="cabinet.php"<?= $act('cabinet.php') ?>>Личный кабинет</a>
-                <a href="order.php"<?= $act('order.php') ?>>Подать <?= e(app('entity_label')) ?></a>
+                <a href="order.php"<?= $act('order.php') ?>>Подать заявку</a>
             <?php endif; ?>
         </div>
         <div class="nav-right">
@@ -88,20 +60,16 @@ function layout_header(string $title, string $icon = '', string $caption = ''): 
 }
 
 function layout_footer(): void {
-    $ct = theme('contacts');
-    $u  = current_user();
+    $u = current_user();
+    // Несколько курсов для подвала (берём из базы)
     $courses = q('SELECT name FROM courses WHERE is_active = 1 ORDER BY id LIMIT 4');
     ?>
 </main>
 <footer class="footer">
     <div class="footer-grid">
         <div class="footer-brand">
-            <?php if (theme('logo_img')): ?>
-                <img src="<?= e(theme('logo_img')) ?>" alt="<?= e(theme('site_name')) ?>" class="logo-img">
-            <?php else: ?>
-                <span class="logo-text"><?= e(theme('site_name')) ?></span>
-            <?php endif; ?>
-            <p class="muted small"><?= e(theme('tagline')) ?></p>
+            <span class="logo-text">Корочки.есть</span>
+            <p class="muted small">Онлайн-курсы дополнительного профессионального образования</p>
         </div>
 
         <div class="footer-col">
@@ -111,7 +79,7 @@ function layout_footer(): void {
             <a href="index.php#contacts">Обратная связь</a>
             <?php if ($u): ?>
                 <a href="cabinet.php">Личный кабинет</a>
-                <a href="order.php">Подать <?= e(app('entity_label')) ?></a>
+                <a href="order.php">Подать заявку</a>
             <?php else: ?>
                 <a href="login.php">Войти</a>
                 <a href="register.php">Регистрация</a>
@@ -127,13 +95,13 @@ function layout_footer(): void {
 
         <div class="footer-col">
             <h4>Контакты</h4>
-            <span class="muted small"><?= e($ct['phone']) ?></span>
-            <span class="muted small"><?= e($ct['email']) ?></span>
-            <span class="muted small"><?= e($ct['address']) ?></span>
+            <span class="muted small">8(800)555-35-35</span>
+            <span class="muted small">info@korochki.example</span>
+            <span class="muted small">г. Москва, ул. Образцовая, д. 1</span>
         </div>
     </div>
     <div class="footer-bottom">
-        <span class="muted small">© <?= date('Y') ?> <?= e(theme('site_name')) ?></span>
+        <span class="muted small">© <?= date('Y') ?> Корочки.есть</span>
     </div>
 </footer>
 <script src="assets/app.js"></script>

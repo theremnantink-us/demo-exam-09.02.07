@@ -1,14 +1,14 @@
 <?php
-/* ============================================================================
-   index.php — ГЛАВНАЯ СТРАНИЦА с наполнением (за это дают баллы).
-   Блоки: hero (лого+фото), слайдер (4 фото, автосмена 3 сек, вперёд/назад),
-   преимущества, список курсов, отзывы (из БД), форма обратной связи.
-   Всё наполнение и стиль берутся из theme.php — меняешь тему в одном месте.
-   ========================================================================== */
+/* ----------------------------------------------------------------------------
+   index.php — главная страница.
+   ИНСТРУКЦИЯ (удали после настройки): тексты, картинки и цифры ниже меняешь
+   прямо здесь под свою тему. Картинки слайдера — 4 фото одинакового размера
+   в папке assets/img/ (замени slide1..4 на фото из задания).
+---------------------------------------------------------------------------- */
 require_once __DIR__ . '/layout.php';
 
 $flash = '';
-// --- Форма обратной связи (POST) -------------------------------------------
+// Обработка формы обратной связи
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'feedback') {
     csrf_require();
     $name    = sanitize($_POST['name'] ?? '');
@@ -27,9 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'feedb
     $flash = 'Проверьте поля формы: ' . implode(', ', $err);
 }
 
+// Данные для главной из базы
 $courses = q('SELECT name FROM courses WHERE is_active = 1 ORDER BY id LIMIT 6');
 $reviews = q('SELECT r.*, u.fio FROM reviews r JOIN users u ON u.id = r.user_id ORDER BY r.created_at DESC LIMIT 6');
-$hero = theme('hero');
+
+// 4 слайда для галереи (поменяй пути и подписи под свою тему)
+$slides = [
+    ['img' => 'assets/img/slide1.svg', 'caption' => 'Практика на реальных задачах'],
+    ['img' => 'assets/img/slide2.svg', 'caption' => 'Преподаватели-эксперты'],
+    ['img' => 'assets/img/slide3.svg', 'caption' => 'Гибкий график обучения'],
+    ['img' => 'assets/img/slide4.svg', 'caption' => 'Документ об окончании'],
+];
 
 layout_header('');   // на главной свой заголовок внутри hero
 ?>
@@ -37,33 +45,30 @@ layout_header('');   // на главной свой заголовок внут
 <!-- ========================= HERO ========================= -->
 <section class="hero">
     <div class="hero-text">
-        <?php if (!empty($hero['eyebrow'])): ?><span class="eyebrow"><?= e($hero['eyebrow']) ?></span><?php endif; ?>
-        <h1 class="hero-title"><?= e($hero['title']) ?></h1>
-        <p class="hero-sub"><?= e($hero['subtitle']) ?></p>
+        <span class="eyebrow">Онлайн-образование</span>
+        <h1 class="hero-title">Получи новую профессию онлайн</h1>
+        <p class="hero-sub">Курсы дополнительного образования с документом по окончании. Учись в удобное время.</p>
         <div class="hero-actions">
-            <a class="btn btn-lg" href="<?= current_user() ? 'order.php' : 'register.php' ?>"><?= e($hero['cta']) ?></a>
+            <a class="btn btn-lg" href="<?= current_user() ? 'order.php' : 'register.php' ?>">Выбрать курс</a>
             <a class="btn-ghost btn-lg" href="#contacts">Связаться</a>
         </div>
-        <?php if (!empty($hero['stats'])): ?>
         <div class="hero-stats">
-            <?php foreach ($hero['stats'] as $st): ?>
-                <div class="stat"><b><?= e($st['num']) ?></b><span><?= e($st['label']) ?></span></div>
-            <?php endforeach; ?>
+            <div class="stat"><b>1200+</b><span>учеников</span></div>
+            <div class="stat"><b>10</b><span>курсов</span></div>
+            <div class="stat"><b>4.9</b><span>рейтинг</span></div>
         </div>
-        <?php endif; ?>
     </div>
     <div class="hero-media">
-        <?php /* hero — это LCP, грузим сразу (priority), не лениво */ ?>
-        <?= media_picture($hero['image'], theme('site_name'), ['lazy' => false, 'priority' => true, 'w' => 640, 'h' => 440]) ?>
+        <!-- hero — главное фото, грузим сразу (не lazy) -->
+        <?= media_picture('assets/img/hero.svg', 'Корочки.есть', ['lazy' => false, 'priority' => true, 'w' => 640, 'h' => 440]) ?>
     </div>
 </section>
 
 <!-- ===================== СЛАЙДЕР (4 фото, авто 3 сек) ===================== -->
 <section class="slider" data-slider data-interval="3000" aria-label="Галерея">
     <div class="slides">
-        <?php foreach (theme('slides') as $i => $s): ?>
+        <?php foreach ($slides as $i => $s): ?>
             <figure class="slide <?= $i === 0 ? 'active' : '' ?>">
-                <?php /* первый слайд виден сразу — грузим без lazy, остальные лениво */ ?>
                 <?= media_picture($s['img'], $s['caption'], ['lazy' => $i !== 0, 'w' => 900, 'h' => 380]) ?>
                 <figcaption><?= e($s['caption']) ?></figcaption>
             </figure>
@@ -72,7 +77,7 @@ layout_header('');   // на главной свой заголовок внут
     <button class="slider-btn prev" data-prev aria-label="Назад">‹</button>
     <button class="slider-btn next" data-next aria-label="Вперёд">›</button>
     <div class="dots">
-        <?php foreach (theme('slides') as $i => $s): ?>
+        <?php foreach ($slides as $i => $s): ?>
             <span class="dot <?= $i === 0 ? 'active' : '' ?>" data-dot="<?= $i ?>"></span>
         <?php endforeach; ?>
     </div>
@@ -80,13 +85,21 @@ layout_header('');   // на главной свой заголовок внут
 
 <!-- ===================== ПРЕИМУЩЕСТВА ===================== -->
 <section class="features">
-    <?php foreach (theme('features') as $ft): ?>
-        <div class="feature card-soft">
-            <div class="feature-icon"><?= $ft['icon'] ?></div>
-            <h3><?= e($ft['title']) ?></h3>
-            <p class="muted"><?= e($ft['text']) ?></p>
-        </div>
-    <?php endforeach; ?>
+    <div class="feature card-soft">
+        <div class="feature-icon">🎓</div>
+        <h3>Документ об окончании</h3>
+        <p class="muted">Официальное удостоверение о повышении квалификации.</p>
+    </div>
+    <div class="feature card-soft">
+        <div class="feature-icon">💻</div>
+        <h3>Полностью онлайн</h3>
+        <p class="muted">Учитесь из любой точки в удобное время.</p>
+    </div>
+    <div class="feature card-soft">
+        <div class="feature-icon">⭐</div>
+        <h3>Практика</h3>
+        <p class="muted">Реальные проекты и обратная связь от наставника.</p>
+    </div>
 </section>
 
 <!-- ===================== КУРСЫ ===================== -->
