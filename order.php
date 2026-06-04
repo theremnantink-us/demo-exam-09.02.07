@@ -9,8 +9,7 @@ require_once __DIR__ . '/layout.php';
 $user = require_login();
 
 $courses  = q('SELECT name FROM courses WHERE is_active = 1 ORDER BY id');
-// Способы оплаты (поменяй под своё задание)
-$payments = ['Наличными', 'Перевод по номеру телефона'];
+$payments = app('payment_types');
 
 $errors = [];
 $old = ['course_name' => '', 'desired_date' => '', 'payment_type' => ''];
@@ -40,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 layout_header('');
 ?>
 <div class="auth">
-<h1><span class="sec-ico">➕</span>Новая заявка</h1>
+<h1><span class="sec-ico">➕</span>Новая <?= e(app('entity_label')) ?></h1>
 <p class="section-caption">Выберите курс и удобные условия — все поля обязательны.</p>
 <form method="post" class="card" novalidate>
     <?= csrf_field() ?>

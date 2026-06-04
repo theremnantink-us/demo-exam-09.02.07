@@ -91,23 +91,10 @@ function init_schema(PDO $pdo): void {
 }
 
 function seed_if_empty(PDO $pdo): void {
-    // Список курсов (тестовые данные, ≥10 строк).
-    // ИНСТРУКЦИЯ (удали после настройки): меняешь курсы под свою тему здесь.
-    $courses = [
-        'Основы алгоритмизации и программирования',
-        'Основы веб-дизайна',
-        'Основы проектирования баз данных',
-        'Веб-разработка на PHP',
-        'Основы Python',
-        'Компьютерные сети',
-        'Информационная безопасность',
-        'Графический дизайн',
-        'Системное администрирование',
-        'Управление проектами',
-    ];
+    // Курсы — из config (≥10).
     if ((int)$pdo->query('SELECT COUNT(*) c FROM courses')->fetch()['c'] === 0) {
         $ins = $pdo->prepare('INSERT INTO courses (name) VALUES (?)');
-        foreach ($courses as $name) $ins->execute([$name]);
+        foreach (app('courses') as $name) $ins->execute([$name]);
     }
 
     // Пользователи — 10 шт. Пароль у всех: Parol12345 (хранится ХЕШЕМ).
@@ -131,8 +118,9 @@ function seed_if_empty(PDO $pdo): void {
 
     // Заявки — 10 шт. с разными статусами (часть «Обучение завершено» для отзывов).
     if ((int)$pdo->query('SELECT COUNT(*) c FROM orders')->fetch()['c'] === 0) {
-        $statuses = ['new', 'studying', 'done'];                 // ключи статусов заявки
-        $payments = ['Наличными', 'Перевод по номеру телефона']; // способы оплаты
+        $statuses = array_keys(app('statuses'));   // new, studying, done
+        $payments = app('payment_types');
+        $courses  = app('courses');
         $ins = $pdo->prepare('INSERT INTO orders (user_id,course_name,desired_date,payment_type,status) VALUES (?,?,?,?,?)');
         for ($i = 1; $i <= 10; $i++) {
             // У первого пользователя (ivanov1) делаем завершённую заявку,

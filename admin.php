@@ -8,9 +8,8 @@
 require_once __DIR__ . '/layout.php';
 
 require_admin();
-// Подписи статусов заявки (ключ в базе => текст на экране)
-$statuses = ['new' => 'Новая', 'studying' => 'Идёт обучение', 'done' => 'Обучение завершено'];
-$per_page = 8;   // сколько заявок показывать на одной странице (пагинация)
+$statuses = app('statuses');
+$per_page = (int)app('per_page');
 
 // --- Смена статуса (POST) ---------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

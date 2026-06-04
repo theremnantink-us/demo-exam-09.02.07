@@ -7,10 +7,8 @@
 require_once __DIR__ . '/layout.php';
 
 $user = require_login();
-// Подписи статусов заявки (ключ в базе => текст на экране)
-$statuses = ['new' => 'Новая', 'studying' => 'Идёт обучение', 'done' => 'Обучение завершено'];
-// При каком статусе можно оставить отзыв (после завершения обучения)
-$review_status = 'done';
+$statuses = app('statuses');
+$review_status = app('review_allowed_status');   // 'done'
 $flash = '';
 
 // --- Отправка отзыва --------------------------------------------------------
@@ -41,11 +39,11 @@ $orders = q('SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC', [
 // id заявок, по которым отзыв уже оставлен
 $reviewed = array_column(q('SELECT order_id FROM reviews WHERE user_id = ?', [$user['id']]), 'order_id');
 
-layout_header('Мои заявки', '📋', 'Ваши заявки и их статус. Отзыв — после завершения обучения.');
+layout_header('Мои ' . app('entity_label_gen'), '📋', 'Ваши заявки и их статус. Отзыв — после завершения обучения.');
 ?>
 <div class="row-between" style="margin-bottom:18px">
     <span class="muted">Всего заявок: <?= count($orders) ?></span>
-    <a class="btn" href="order.php">+ Новая заявка</a>
+    <a class="btn" href="order.php">+ Новая <?= e(app('entity_label')) ?></a>
 </div>
 
 <?php if (isset($_GET['ok'])): ?><div class="toast" data-toast>Заявка успешно отправлена!</div><?php endif; ?>
@@ -62,7 +60,7 @@ foreach ($orders as $o) { if ($o['status'] === $review_status && !in_array($o['i
 <?php endif; ?>
 
 <?php if (!$orders): ?>
-    <p class="muted">У вас пока нет заявок. Нажмите «Новая заявка».</p>
+    <p class="muted">У вас пока нет заявок. Нажмите «Новая <?= e(app('entity_label')) ?>».</p>
 <?php else: ?>
 <table class="table" id="orders">
     <thead><tr><th>#</th><th>Курс</th><th>Дата начала</th><th>Оплата</th><th>Статус</th><th>Отзыв</th></tr></thead>
