@@ -1,31 +1,32 @@
-/* ============================================================================
-   mobile.css — общий стиль мобильных макетов (390×844). Тёмная ЧБ-тема.
-   Каждый файл *.html в этой папке — отдельный экран приложения под смартфон
-   (требование задания: «отдельный файл для каждой страницы», 390×844 px).
-   ========================================================================== */
+/* mobile.css — общий стиль мобильных макетов 390×844 (тёмная тема под курсы).
+   Каждый *.html — отдельный экран (требование: отдельный файл на страницу). */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-    width: 390px; min-height: 844px; margin: 0 auto;
-    background: #0e0e0e; color: #ececec;
-    font-family: 'Segoe UI', system-ui, Arial, sans-serif;
-    display: flex; flex-direction: column;
-    border-left: 1px solid #222; border-right: 1px solid #222;
-}
-.bar { background: #1a1a1a; padding: 16px; font-weight: 700; color: #e8e8e8; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-.bar .menu { color: #8a8a8a; font-size: 22px; }
-.screen { padding: 20px 18px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
-h1 { font-size: 22px; }
-.cap { color: #8a8a8a; font-size: 13px; margin-top: -8px; }
+body { width: 390px; min-height: 844px; margin: 0 auto; background: #0f1115; color: #eef1f6;
+    font-family: 'Segoe UI', system-ui, Arial, sans-serif; display: flex; flex-direction: column;
+    border-left: 1px solid #222; border-right: 1px solid #222; }
+.bar { background: #171a21; padding: 16px; font-weight: 700; border-bottom: 1px solid #2a3038;
+    display: flex; justify-content: space-between; align-items: center; }
+.bar .menu { color: #9aa3b2; font-size: 22px; }
+.screen { padding: 18px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+h1 { font-size: 22px; } .cap { color: #9aa3b2; font-size: 13px; margin-top: -8px; }
 label { font-size: 13px; font-weight: 600; display: flex; flex-direction: column; gap: 6px; }
 label.row { flex-direction: row; align-items: center; gap: 8px; font-weight: 400; }
-input, select { padding: 11px 12px; border: 1px solid #333; border-radius: 9px; background: #242424; color: #ececec; font-size: 15px; }
-.btn { background: #e8e8e8; color: #111; border: none; padding: 13px; border-radius: 9px; font-size: 15px; font-weight: 600; text-align: center; }
-.item { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 12px; font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
-.muted { color: #8a8a8a; font-size: 12px; }
-.badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; border: 1px solid #333; width: max-content; }
-.b-new { background: #2a2a2a; color: #cfcfcf; }
-.b-work { background: #4a4a4a; color: #f0f0f0; }
-.b-done { background: #f0f0f0; color: #111; }
-.b-cancel { background: #161616; color: #777; text-decoration: line-through; }
-.link { color: #8a8a8a; font-size: 13px; text-align: center; }
-.foot { margin-top: auto; padding: 16px; text-align: center; color: #555; font-size: 12px; }
+input, select, textarea { padding: 11px 12px; border: 1px solid #2a3038; border-radius: 9px;
+    background: #1f242d; color: #eef1f6; font-size: 15px; width: 100%; }
+.btn { background: #4f8cff; color: #fff; border: none; padding: 13px; border-radius: 9px;
+    font-size: 15px; font-weight: 600; text-align: center; }
+.item { background: #171a21; border: 1px solid #2a3038; border-radius: 12px; padding: 12px;
+    font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+.muted { color: #9aa3b2; font-size: 12px; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; width: max-content; }
+.b-new { background: rgba(79,140,255,.18); color: #8fb6ff; }
+.b-work { background: rgba(224,136,59,.18); color: #f0b070; }
+.b-done { background: rgba(46,189,113,.18); color: #6ee0a0; }
+.link { color: #9aa3b2; font-size: 13px; text-align: center; }
+.hero { background: linear-gradient(135deg,#4f8cff,#7c5cff); border-radius: 16px; padding: 22px; color: #fff; }
+.slider { position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 16/10; background: #1f242d; }
+.slider img { width: 100%; height: 100%; object-fit: cover; }
+.slider .cap2 { position: absolute; bottom: 0; left: 0; right: 0; padding: 12px; background: linear-gradient(transparent,rgba(0,0,0,.6)); font-weight: 600; }
+.slider .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,.45); color: #fff; display: flex; align-items: center; justify-content: center; }
+.slider .prev { left: 8px; } .slider .next { right: 8px; }
+.foot { margin-top: auto; padding: 14px; text-align: center; color: #555; font-size: 12px; }

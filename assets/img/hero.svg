@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#4f8cff"/><stop offset="1" stop-color="#7c5cff"/></linearGradient></defs>
+  <rect width="640" height="440" rx="20" fill="url(#g)"/>
+  <text x="320" y="210" text-anchor="middle" font-family="Arial" font-size="64">🎓</text>
+  <text x="320" y="270" text-anchor="middle" font-family="Arial" font-size="22" fill="#fff" opacity=".9">Онлайн-обучение</text>
+  <text x="320" y="300" text-anchor="middle" font-family="Arial" font-size="13" fill="#fff" opacity=".7">🔧 замени на фото из задания (assets/img/hero.svg)</text>
+</svg>

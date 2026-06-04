@@ -1,0 +1,23 @@
+# ============================================================================
+# .htaccess — серверная часть подсистемы безопасности (Apache/XAMPP).
+# Дублирует и усиливает защиту из security.php.
+# ============================================================================
+
+# Запрет листинга каталогов (чтобы нельзя было смотреть содержимое папок)
+Options -Indexes
+
+# Защитные HTTP-заголовки (если включён mod_headers — в XAMPP обычно да)
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Закрыть прямой доступ к служебным файлам (на случай, если PHP отключён)
+<FilesMatch "\.(sql|md|log|gitignore)$">
+    Require all denied
+</FilesMatch>
+
+# Запретить доступ к каталогу .git
+RedirectMatch 404 /\.git

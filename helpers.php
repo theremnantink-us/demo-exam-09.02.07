@@ -15,33 +15,34 @@ function e($s): string {
     return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
 }
 
-// --- Правила валидации ------------------------------------------------------
+// --- Правила валидации (форматы задания-2026) -------------------------------
+// 🔧 Если в задании другие правила — правишь regex здесь И в assets/app.js.
 
-// Логин: 3–50 символов, латиница/цифры/_ . (уникальность проверяется в register.php)
+// Логин: латиница и цифры, не менее 6 символов. Уникальность — в register.php.
 function err_login(string $v): string {
     if ($v === '') return 'Введите логин';
-    if (!preg_match('/^[A-Za-z0-9_.]{3,50}$/', $v)) return 'Логин: 3–50 символов (латиница, цифры, _ .)';
+    if (!preg_match('/^[A-Za-z0-9]{6,}$/', $v)) return 'Логин: латиница и цифры, не менее 6 символов';
     return '';
 }
 
-// Пароль: минимум 6 символов (требование Модуля 3).
+// Пароль: минимум 8 символов (задание-2026).
 function err_password(string $v): string {
     if ($v === '') return 'Введите пароль';
-    if (mb_strlen($v) < 6) return 'Пароль должен быть не короче 6 символов';
+    if (mb_strlen($v) < 8) return 'Пароль должен быть не короче 8 символов';
     return '';
 }
 
-// ФИО: только кириллица и пробелы (требование Модуля 3).
+// ФИО: только кириллица и пробелы.
 function err_fio(string $v): string {
     if ($v === '') return 'Введите ФИО';
     if (!preg_match('/^[А-Яа-яЁё\s]+$/u', $v)) return 'ФИО: только русские буквы и пробелы';
     return '';
 }
 
-// Телефон в формате +7(XXX)-XXX-XX-XX (требование Модуля 3).
+// Телефон в формате 8(XXX)XXX-XX-XX (задание-2026).
 function err_phone(string $v): string {
     if ($v === '') return 'Введите телефон';
-    if (!preg_match('/^\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}$/', $v)) return 'Формат: +7(XXX)-XXX-XX-XX';
+    if (!preg_match('/^8\(\d{3}\)\d{3}-\d{2}-\d{2}$/', $v)) return 'Формат: 8(XXX)XXX-XX-XX';
     return '';
 }
 
@@ -49,6 +50,14 @@ function err_phone(string $v): string {
 function err_email(string $v): string {
     if ($v === '') return 'Введите email';
     if (!filter_var($v, FILTER_VALIDATE_EMAIL)) return 'Некорректный email';
+    return '';
+}
+
+// Дата в формате ДД.ММ.ГГГГ (задание-2026: дата начала обучения).
+function err_date(string $v): string {
+    if ($v === '') return 'Введите дату';
+    if (!preg_match('/^(\d{2})\.(\d{2})\.(\d{4})$/', $v, $m)) return 'Формат даты: ДД.ММ.ГГГГ';
+    if (!checkdate((int)$m[2], (int)$m[1], (int)$m[3])) return 'Такой даты не существует';
     return '';
 }
 

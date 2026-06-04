@@ -11,19 +11,20 @@
 
 ```mermaid
 erDiagram
-    users ||--o{ orders : "оставляет"
-    services ||--o{ orders : "указывается в"
+    users    ||--o{ orders  : "оставляет"
+    users    ||--o{ reviews : "пишет"
+    orders   ||--o{ reviews : "по заявке"
 
     users {
         int id PK
         varchar login "UNIQUE"
-        varchar password
+        varchar password "хеш"
         varchar fio
         varchar phone
         varchar email
         datetime created_at
     }
-    services {
+    courses {
         int id PK
         varchar name
         tinyint is_active
@@ -31,21 +32,36 @@ erDiagram
     orders {
         int id PK
         int user_id FK
-        varchar address
-        varchar phone
-        int service_id FK
-        varchar other_service
-        datetime desired_date
+        varchar course_name
+        varchar desired_date
         varchar payment_type
         varchar status
-        varchar cancel_reason
+        datetime created_at
+    }
+    reviews {
+        int id PK
+        int user_id FK
+        int order_id FK
+        varchar course_name
+        tinyint rating
+        varchar text
+        datetime created_at
+    }
+    feedback {
+        int id PK
+        varchar name
+        varchar email
+        varchar message
         datetime created_at
     }
 ```
 
 ## Связи
 - **users 1 — ∞ orders**: один пользователь оставляет много заявок (`orders.user_id → users.id`).
-- **services 1 — ∞ orders**: одна услуга встречается во многих заявках (`orders.service_id → services.id`). Связь необязательная: если выбрана «Иная услуга», `service_id = NULL`, а текст лежит в `other_service`.
+- **users 1 — ∞ reviews**: один пользователь пишет много отзывов (`reviews.user_id → users.id`).
+- **orders 1 — ∞ reviews**: отзыв привязан к заявке (`reviews.order_id → orders.id`).
+- **courses** — справочник курсов; название копируется в `orders.course_name`.
+- **feedback** — независимая таблица сообщений обратной связи.
 
 ## Как сдать диаграмму
 Самый быстрый путь — уже готовые `ER.png` / `ER.svg`. Если нужен свой вариант:
@@ -64,7 +80,7 @@ erDiagram
 1. ERwin → **Actions → Reverse Engineer**.
 2. New model type: **Logical/Physical**, Target DBMS: **MySQL** → Next.
 3. Reverse Engineer From: **Script** → **Browse** → выбери `sql/erwin_reverse.sql` → Next/Finish.
-4. ERwin сам нарисует `users`, `services`, `orders` со связями. Сохрани → получишь `.erwin`.
+4. ERwin сам нарисует все 5 таблиц (`users`, `courses`, `orders`, `reviews`, `feedback`) со связями. Сохрани → получишь `.erwin`.
 
 > Если модель получилась **пустой** — значит файл прочитался как Unicode. Открой
 > `erwin_reverse.sql` в Блокноте → «Сохранить как» → кодировка **ANSI** → импортируй снова.
@@ -72,6 +88,6 @@ erDiagram
 
 ### Способ Б (вручную, ~5 минут)
 1. ERwin → New Model → Logical/Physical, СУБД: MySQL.
-2. Создай 3 сущности `users`, `services`, `orders` с полями из схемы выше (PK — `id`).
-3. Проведи связи: `users → orders` (1:M) и `services → orders` (1:M).
+2. Создай 5 сущностей `users`, `courses`, `orders`, `reviews`, `feedback` (PK — `id`).
+3. Проведи связи: `users → orders`, `users → reviews`, `orders → reviews` (1:M).
 4. Сохрани модель — получишь `.erwin`-файл. Образец — `ER.png`.
