@@ -70,19 +70,23 @@ layout_header('Мои ' . app('entity_label_gen'), '📋', 'Ваши заявк�
                     <span class="muted small">✓ оставлен</span>
                 <?php else: ?>
                     <details class="review-box">
-                        <summary class="btn-mini">Оставить отзыв</summary>
+                        <summary class="btn-mini">★ Оставить отзыв</summary>
                         <form method="post" class="review-form">
                             <?= csrf_field() ?>
                             <input type="hidden" name="action" value="review">
                             <input type="hidden" name="order_id" value="<?= e($o['id']) ?>">
+                            <p class="muted small">Оцените качество обучения по курсу «<?= e($o['course_name']) ?>».</p>
                             <label class="inline">Оценка
                                 <select name="rating">
-                                    <option value="5">5 ★</option><option value="4">4 ★</option>
-                                    <option value="3">3 ★</option><option value="2">2 ★</option><option value="1">1 ★</option>
+                                    <option value="5">5 — отлично</option>
+                                    <option value="4">4 — хорошо</option>
+                                    <option value="3">3 — нормально</option>
+                                    <option value="2">2 — плохо</option>
+                                    <option value="1">1 — очень плохо</option>
                                 </select>
                             </label>
-                            <textarea name="text" rows="2" placeholder="Ваш отзыв о курсе" required></textarea>
-                            <button type="submit" class="btn-mini">Отправить</button>
+                            <textarea name="text" rows="3" placeholder="Что понравилось, что можно улучшить?" required></textarea>
+                            <button type="submit" class="btn-mini">Отправить отзыв</button>
                         </form>
                     </details>
                 <?php endif; ?>

@@ -13,6 +13,8 @@ function layout_header(string $title, string $icon = '', string $caption = ''): 
     $u = current_user();
     $c = theme('colors');
     $f = theme('fonts');
+    $cur = basename($_SERVER['PHP_SELF'] ?? '');           // текущая страница (для active)
+    $act = fn(string $p) => $cur === $p ? ' class="active"' : '';
     ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -56,17 +58,23 @@ function layout_header(string $title, string $icon = '', string $caption = ''): 
         <?php endif; ?>
     </a>
     <nav class="nav">
-        <a href="index.php">Главная</a>
-        <?php if ($u): ?>
-            <a href="cabinet.php">Мои <?= e(app('entity_label_gen')) ?></a>
-            <a href="order.php">Новая <?= e(app('entity_label')) ?></a>
-            <span class="nav-user">👤 <?= e($u['fio']) ?></span>
-            <a href="logout.php">Выйти</a>
-        <?php else: ?>
-            <a href="login.php">Вход</a>
-            <a href="register.php">Регистрация</a>
-            <a href="admin_login.php">Админ</a>
-        <?php endif; ?>
+        <div class="nav-links">
+            <a href="index.php"<?= $act('index.php') ?>>Главная</a>
+            <?php if ($u): ?>
+                <a href="cabinet.php"<?= $act('cabinet.php') ?>>Личный кабинет</a>
+                <a href="order.php"<?= $act('order.php') ?>>Подать <?= e(app('entity_label')) ?></a>
+            <?php endif; ?>
+        </div>
+        <div class="nav-right">
+            <?php if ($u): ?>
+                <a class="nav-user" href="cabinet.php" title="Личный кабинет"><?= e($u['fio']) ?></a>
+                <a class="btn-nav" href="logout.php">Выйти</a>
+            <?php else: ?>
+                <a href="admin_login.php" class="nav-muted">Админ</a>
+                <a href="login.php"<?= $act('login.php') ?>>Войти</a>
+                <a class="btn-nav" href="register.php">Регистрация</a>
+            <?php endif; ?>
+        </div>
     </nav>
 </header>
 <main class="container fade-in">
