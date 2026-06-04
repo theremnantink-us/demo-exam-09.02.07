@@ -60,6 +60,7 @@ function layout_header(string $title, string $icon = '', string $caption = ''): 
     <nav class="nav">
         <div class="nav-links">
             <a href="index.php"<?= $act('index.php') ?>>Главная</a>
+            <a href="index.php#reviews">Отзывы</a>
             <?php if ($u): ?>
                 <a href="cabinet.php"<?= $act('cabinet.php') ?>>Личный кабинет</a>
                 <a href="order.php"<?= $act('order.php') ?>>Подать <?= e(app('entity_label')) ?></a>
@@ -70,7 +71,6 @@ function layout_header(string $title, string $icon = '', string $caption = ''): 
                 <a class="nav-user" href="cabinet.php" title="Личный кабинет"><?= e($u['fio']) ?></a>
                 <a class="btn-nav" href="logout.php">Выйти</a>
             <?php else: ?>
-                <a href="admin_login.php" class="nav-muted">Админ</a>
                 <a href="login.php"<?= $act('login.php') ?>>Войти</a>
                 <a class="btn-nav" href="register.php">Регистрация</a>
             <?php endif; ?>
@@ -89,18 +89,52 @@ function layout_header(string $title, string $icon = '', string $caption = ''): 
 
 function layout_footer(): void {
     $ct = theme('contacts');
+    $u  = current_user();
+    $courses = q('SELECT name FROM courses WHERE is_active = 1 ORDER BY id LIMIT 4');
     ?>
 </main>
 <footer class="footer">
-    <div class="footer-cols">
-        <div><strong><?= e(theme('site_name')) ?></strong><br><span class="muted"><?= e(theme('tagline')) ?></span></div>
-        <div class="muted">
-            📞 <?= e($ct['phone']) ?><br>
-            ✉ <?= e($ct['email']) ?><br>
-            📍 <?= e($ct['address']) ?>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <?php if (theme('logo_img')): ?>
+                <img src="<?= e(theme('logo_img')) ?>" alt="<?= e(theme('site_name')) ?>" class="logo-img">
+            <?php else: ?>
+                <span class="logo-text"><?= e(theme('site_name')) ?></span>
+            <?php endif; ?>
+            <p class="muted small"><?= e(theme('tagline')) ?></p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Навигация</h4>
+            <a href="index.php">Главная</a>
+            <a href="index.php#reviews">Отзывы</a>
+            <a href="index.php#contacts">Обратная связь</a>
+            <?php if ($u): ?>
+                <a href="cabinet.php">Личный кабинет</a>
+                <a href="order.php">Подать <?= e(app('entity_label')) ?></a>
+            <?php else: ?>
+                <a href="login.php">Войти</a>
+                <a href="register.php">Регистрация</a>
+            <?php endif; ?>
+        </div>
+
+        <div class="footer-col">
+            <h4>Курсы</h4>
+            <?php foreach ($courses as $cr): ?>
+                <a href="<?= $u ? 'order.php' : 'login.php' ?>"><?= e($cr['name']) ?></a>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="footer-col">
+            <h4>Контакты</h4>
+            <span class="muted small"><?= e($ct['phone']) ?></span>
+            <span class="muted small"><?= e($ct['email']) ?></span>
+            <span class="muted small"><?= e($ct['address']) ?></span>
         </div>
     </div>
-    <div class="muted small">© <?= date('Y') ?> <?= e(theme('site_name')) ?></div>
+    <div class="footer-bottom">
+        <span class="muted small">© <?= date('Y') ?> <?= e(theme('site_name')) ?></span>
+    </div>
 </footer>
 <script src="assets/app.js"></script>
 </body>

@@ -50,10 +50,19 @@ layout_header('Мои ' . app('entity_label_gen'), '📋', 'Ваши заявк�
 <?php if (isset($_GET['reviewed'])): ?><div class="toast" data-toast>Спасибо за отзыв!</div><?php endif; ?>
 <?php if ($flash): ?><div class="alert"><?= e($flash) ?></div><?php endif; ?>
 
+<?php
+// есть ли завершённый курс без отзыва — подскажем оставить отзыв
+$can_review = false;
+foreach ($orders as $o) { if ($o['status'] === $review_status && !in_array($o['id'], $reviewed)) { $can_review = true; break; } }
+?>
+<?php if ($can_review): ?>
+    <div class="hint" id="review">★ У вас есть завершённый курс — в столбце «Отзыв» нажмите «Оставить отзыв».</div>
+<?php endif; ?>
+
 <?php if (!$orders): ?>
     <p class="muted">У вас пока нет заявок. Нажмите «Новая <?= e(app('entity_label')) ?>».</p>
 <?php else: ?>
-<table class="table">
+<table class="table" id="orders">
     <thead><tr><th>#</th><th>Курс</th><th>Дата начала</th><th>Оплата</th><th>Статус</th><th>Отзыв</th></tr></thead>
     <tbody>
     <?php foreach ($orders as $o): ?>

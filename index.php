@@ -104,9 +104,9 @@ layout_header('');   // на главной свой заголовок внут
 </section>
 
 <!-- ===================== ОТЗЫВЫ ===================== -->
-<?php if ($reviews): ?>
-<section class="block">
+<section class="block" id="reviews">
     <div class="block-head"><span class="eyebrow">Нам доверяют</span><h2>Отзывы учеников</h2></div>
+    <?php if ($reviews): ?>
     <div class="reviews-grid">
         <?php foreach ($reviews as $rv): ?>
             <?php
@@ -124,8 +124,16 @@ layout_header('');   // на главной свой заголовок внут
             </blockquote>
         <?php endforeach; ?>
     </div>
+    <?php else: ?>
+        <p class="muted center">Пока нет отзывов — станьте первым после завершения курса.</p>
+    <?php endif; ?>
+
+    <!-- Кнопка оставить отзыв (по заданию — доступно после завершения обучения) -->
+    <div class="reviews-cta">
+        <a class="btn btn-lg" href="<?= current_user() ? 'cabinet.php#review' : 'login.php' ?>">Оставить отзыв</a>
+        <p class="muted small">Отзыв можно оставить в личном кабинете после завершения курса.</p>
+    </div>
 </section>
-<?php endif; ?>
 
 <!-- ===================== ОБРАТНАЯ СВЯЗЬ ===================== -->
 <section class="block" id="contacts">
