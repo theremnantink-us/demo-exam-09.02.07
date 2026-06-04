@@ -70,3 +70,32 @@ function err_required(string $v, string $label = 'Поле'): string {
 function collect_errors(array $checks): array {
     return array_filter($checks, fn($msg) => $msg !== '');
 }
+
+/* ============================================================================
+   ОПТИМИЗАЦИЯ ИЗОБРАЖЕНИЙ (даёт баллы в Модуле 2/3).
+   media_picture() выводит картинку с:
+     • ленивой загрузкой (loading="lazy") — грузится только при прокрутке;
+     • WebP-версией через <picture>, если рядом есть файл .webp (меньше вес),
+       с автоматическим фолбэком на оригинал для старых браузеров;
+     • decoding="async" и размерами (защита от «прыжков» вёрстки, CLS).
+   WebP-файлы делает скрипт tools/convert-webp.php (см. docs/ОПТИМИЗАЦИЯ.md).
+   Параметры $o: lazy(bool), class, w, h, priority(bool — для hero/LCP, грузить сразу).
+   ============================================================================ */
+function media_picture(string $src, string $alt, array $o = []): string {
+    $lazy     = $o['lazy'] ?? true;
+    $loading  = $lazy ? 'lazy' : 'eager';
+    $priority = !empty($o['priority']) ? ' fetchpriority="high"' : '';
+    $cls = isset($o['class']) ? ' class="' . e($o['class']) . '"' : '';
+    $w   = isset($o['w']) ? ' width="' . (int)$o['w'] . '"' : '';
+    $h   = isset($o['h']) ? ' height="' . (int)$o['h'] . '"' : '';
+
+    $img = '<img src="' . e($src) . '" alt="' . e($alt) . '" loading="' . $loading
+         . '" decoding="async"' . $cls . $w . $h . $priority . '>';
+
+    // Есть ли рядом WebP-версия (для .jpg/.jpeg/.png)?
+    $webp = preg_replace('/\.(jpe?g|png)$/i', '.webp', $src);
+    if ($webp !== $src && is_file(__DIR__ . '/' . ltrim($webp, '/'))) {
+        return '<picture><source srcset="' . e($webp) . '" type="image/webp">' . $img . '</picture>';
+    }
+    return $img;   // для .svg и когда webp ещё не сгенерирован
+}

@@ -42,7 +42,8 @@ layout_header('');   // на главной свой заголовок внут
         <a class="btn btn-lg" href="<?= current_user() ? 'order.php' : 'register.php' ?>"><?= e($hero['cta']) ?></a>
     </div>
     <div class="hero-media">
-        <img src="<?= e($hero['image']) ?>" alt="<?= e(theme('site_name')) ?>">
+        <?php /* hero — это LCP, грузим сразу (priority), не лениво */ ?>
+        <?= media_picture($hero['image'], theme('site_name'), ['lazy' => false, 'priority' => true, 'w' => 640, 'h' => 440]) ?>
     </div>
 </section>
 
@@ -51,7 +52,8 @@ layout_header('');   // на главной свой заголовок внут
     <div class="slides">
         <?php foreach (theme('slides') as $i => $s): ?>
             <figure class="slide <?= $i === 0 ? 'active' : '' ?>">
-                <img src="<?= e($s['img']) ?>" alt="<?= e($s['caption']) ?>">
+                <?php /* первый слайд виден сразу — грузим без lazy, остальные лениво */ ?>
+                <?= media_picture($s['img'], $s['caption'], ['lazy' => $i !== 0, 'w' => 900, 'h' => 380]) ?>
                 <figcaption><?= e($s['caption']) ?></figcaption>
             </figure>
         <?php endforeach; ?>

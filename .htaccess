@@ -21,3 +21,31 @@ Options -Indexes
 
 # Запретить доступ к каталогу .git
 RedirectMatch 404 /\.git
+
+# ============================================================================
+# ОПТИМИЗАЦИЯ (ускорение загрузки — даёт баллы)
+# ============================================================================
+
+# Gzip-сжатие текстовых ресурсов (HTML/CSS/JS/SVG) — меньше трафик
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Кэширование статики в браузере (картинки/стили/скрипты/шрифты)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/webp "access plus 30 days"
+    ExpiresByType image/png  "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    ExpiresByType text/css   "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType font/woff2 "access plus 30 days"
+</IfModule>
+
+# Тип для WebP (на старых Apache)
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+</IfModule>
