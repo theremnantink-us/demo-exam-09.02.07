@@ -37,9 +37,20 @@ layout_header('');   // на главной свой заголовок внут
 <!-- ========================= HERO ========================= -->
 <section class="hero">
     <div class="hero-text">
+        <?php if (!empty($hero['eyebrow'])): ?><span class="eyebrow"><?= e($hero['eyebrow']) ?></span><?php endif; ?>
         <h1 class="hero-title"><?= e($hero['title']) ?></h1>
         <p class="hero-sub"><?= e($hero['subtitle']) ?></p>
-        <a class="btn btn-lg" href="<?= current_user() ? 'order.php' : 'register.php' ?>"><?= e($hero['cta']) ?></a>
+        <div class="hero-actions">
+            <a class="btn btn-lg" href="<?= current_user() ? 'order.php' : 'register.php' ?>"><?= e($hero['cta']) ?></a>
+            <a class="btn-ghost btn-lg" href="#contacts">Связаться</a>
+        </div>
+        <?php if (!empty($hero['stats'])): ?>
+        <div class="hero-stats">
+            <?php foreach ($hero['stats'] as $st): ?>
+                <div class="stat"><b><?= e($st['num']) ?></b><span><?= e($st['label']) ?></span></div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
     </div>
     <div class="hero-media">
         <?php /* hero — это LCP, грузим сразу (priority), не лениво */ ?>
@@ -80,7 +91,7 @@ layout_header('');   // на главной свой заголовок внут
 
 <!-- ===================== КУРСЫ ===================== -->
 <section class="block">
-    <h2>Популярные курсы</h2>
+    <div class="block-head"><span class="eyebrow">Каталог</span><h2>Популярные курсы</h2></div>
     <div class="courses-grid">
         <?php foreach ($courses as $cr): ?>
             <div class="course-card card-soft">
@@ -95,13 +106,21 @@ layout_header('');   // на главной свой заголовок внут
 <!-- ===================== ОТЗЫВЫ ===================== -->
 <?php if ($reviews): ?>
 <section class="block">
-    <h2>Отзывы учеников</h2>
+    <div class="block-head"><span class="eyebrow">Нам доверяют</span><h2>Отзывы учеников</h2></div>
     <div class="reviews-grid">
         <?php foreach ($reviews as $rv): ?>
+            <?php
+                // инициалы для аватара (первые буквы фамилии и имени)
+                $parts = preg_split('/\s+/', trim($rv['fio']));
+                $initials = mb_strtoupper(mb_substr($parts[0] ?? '', 0, 1) . mb_substr($parts[1] ?? '', 0, 1));
+            ?>
             <blockquote class="review card-soft">
                 <div class="stars"><?= str_repeat('★', (int)$rv['rating']) . str_repeat('☆', 5 - (int)$rv['rating']) ?></div>
                 <p>«<?= e($rv['text']) ?>»</p>
-                <footer><?= e($rv['fio']) ?> · <span class="muted small"><?= e($rv['course_name']) ?></span></footer>
+                <footer class="review-author">
+                    <span class="avatar"><?= e($initials) ?></span>
+                    <span><?= e($rv['fio']) ?><br><span class="muted small"><?= e($rv['course_name']) ?></span></span>
+                </footer>
             </blockquote>
         <?php endforeach; ?>
     </div>
@@ -110,7 +129,7 @@ layout_header('');   // на главной свой заголовок внут
 
 <!-- ===================== ОБРАТНАЯ СВЯЗЬ ===================== -->
 <section class="block" id="contacts">
-    <h2>Обратная связь</h2>
+    <div class="block-head"><span class="eyebrow">Контакты</span><h2>Обратная связь</h2></div>
     <?php if (isset($_GET['fb'])): ?><div class="toast" data-toast>Спасибо! Сообщение отправлено.</div><?php endif; ?>
     <?php if ($flash): ?><div class="alert"><?= e($flash) ?></div><?php endif; ?>
     <form method="post" class="card feedback-card">

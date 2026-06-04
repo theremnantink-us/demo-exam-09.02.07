@@ -184,4 +184,99 @@ textarea { resize: vertical; }
     .table td { border: none; border-bottom: 1px solid var(--border, #2a3038); display: flex; justify-content: space-between; gap: 12px; }
     .table td::before { content: attr(data-label); color: var(--muted, #9aa3b2); font-size: 12px; text-transform: uppercase; }
     .filters input, .filters select { max-width: 100%; }
+    .hero-stats { gap: 16px; }
 }
+
+/* ============================================================================
+   ВИЗУАЛЬНЫЙ АПГРЕЙД (объём, градиенты, акценты). Идёт последним — усиливает базу.
+   Цвета берутся из переменных темы, поэтому при смене theme.php всё пересчитается.
+   ============================================================================ */
+body { background:
+    radial-gradient(1200px 600px at 80% -10%, color-mix(in srgb, var(--accent,#4f8cff) 14%, transparent), transparent 60%),
+    var(--bg, #0f1115);
+    background-attachment: fixed; }
+h1, h2 { letter-spacing: -.02em; }
+
+/* Шапка с лёгкой тенью и размытием */
+.topbar { backdrop-filter: blur(8px); box-shadow: 0 1px 0 rgba(255,255,255,.03); }
+
+/* Кнопки — градиент + мягкое свечение */
+button, .btn, .btn-lg, .btn-mini {
+    background: linear-gradient(135deg, var(--accent, #4f8cff), var(--accent-2, #7c5cff));
+    box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--accent,#4f8cff) 60%, transparent);
+}
+button:hover, .btn:hover, .btn-lg:hover, .btn-mini:hover { transform: translateY(-1px); filter: brightness(1.08); }
+
+/* Плашка-эйбрау */
+.eyebrow {
+    display: inline-block; padding: 5px 13px; border-radius: 999px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: .04em; text-transform: uppercase; margin-bottom: 12px;
+    color: var(--accent, #4f8cff);
+    background: color-mix(in srgb, var(--accent,#4f8cff) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent,#4f8cff) 30%, transparent);
+}
+.block-head { text-align: center; margin-bottom: 26px; }
+.block-head h2 { font-size: 30px; margin: 0; }
+
+/* HERO — свечение, кнопки в ряд, статистика */
+.hero { position: relative; margin: 36px 0 56px; }
+.hero::before {
+    content: ''; position: absolute; right: -6%; top: -30%; width: 520px; height: 520px; z-index: -1;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-2,#7c5cff) 38%, transparent), transparent 62%);
+    filter: blur(18px); pointer-events: none;
+}
+.hero-title { font-size: 50px; font-weight: 800; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.hero-media img, .hero-media picture { width: 100%; border-radius: 24px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.6); }
+.hero-stats { display: flex; gap: 32px; margin-top: 30px; }
+.hero-stats .stat b { display: block; font-size: 28px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent,#4f8cff), var(--accent-2,#7c5cff));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-stats .stat span { font-size: 13px; color: var(--muted, #9aa3b2); }
+
+/* Слайдер — объёмная тень */
+.slider { box-shadow: 0 30px 60px -24px rgba(0,0,0,.7); }
+
+/* Карточки — мягкая тень и градиентная подсветка при наведении */
+.card { box-shadow: 0 20px 50px -24px rgba(0,0,0,.55); }
+.card-soft { box-shadow: 0 14px 36px -22px rgba(0,0,0,.5); position: relative; overflow: hidden; }
+.card-soft::before {
+    content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; opacity: 0; transition: opacity .25s;
+    background: linear-gradient(90deg, var(--accent,#4f8cff), var(--accent-2,#7c5cff));
+}
+.card-soft:hover::before { opacity: 1; }
+
+/* Преимущества — иконка в круге */
+.feature-icon {
+    width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+    border-radius: 14px; font-size: 26px; margin-bottom: 12px;
+    background: color-mix(in srgb, var(--accent,#4f8cff) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent,#4f8cff) 28%, transparent);
+}
+
+/* Карточки курсов — крупнее, акцентная кнопка */
+.course-card { padding: 22px; }
+.course-card h3 { font-size: 18px; }
+
+/* Отзывы — аватар с инициалами */
+.review { display: flex; flex-direction: column; }
+.review p { font-size: 15.5px; flex: 1; }
+.review-author { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px; }
+.avatar {
+    width: 42px; height: 42px; flex: 0 0 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 15px;
+    background: linear-gradient(135deg, var(--accent,#4f8cff), var(--accent-2,#7c5cff));
+}
+
+/* Поля ввода — чуть мягче */
+input, select, textarea { border-radius: 11px; }
+
+/* Бейджи статусов — точка слева */
+.badge::before { content: '●'; margin-right: 6px; font-size: 9px; vertical-align: middle; }
+
+/* Подвал — градиентная линия сверху */
+.footer { position: relative; }
+.footer::before { content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent,#4f8cff), var(--accent-2,#7c5cff), transparent); }
+
+@media (max-width: 860px) { .hero-title { font-size: 38px; } .hero::before { display: none; } }

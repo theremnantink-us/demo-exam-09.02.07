@@ -123,12 +123,15 @@ function seed_if_empty(PDO $pdo): void {
         $courses  = app('courses');
         $ins = $pdo->prepare('INSERT INTO orders (user_id,course_name,desired_date,payment_type,status) VALUES (?,?,?,?,?)');
         for ($i = 1; $i <= 10; $i++) {
+            // У первого пользователя (ivanov1) делаем завершённую заявку,
+            // чтобы при входе сразу была доступна кнопка «Оставить отзыв».
+            $status = $i === 1 ? 'done' : $statuses[$i % count($statuses)];
             $ins->execute([
                 $i,
                 $courses[($i - 1) % count($courses)],
                 str_pad((string)(($i % 28) + 1), 2, '0', STR_PAD_LEFT) . '.09.2025',
                 $payments[$i % count($payments)],
-                $statuses[$i % count($statuses)],
+                $status,
             ]);
         }
     }
