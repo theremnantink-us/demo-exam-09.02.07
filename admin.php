@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         run('UPDATE orders SET status = ? WHERE id = ?', [$status, $id]);
     }
     // PRG: сохраняем фильтры в редиректе, добавляем флаг для всплывающего сообщения
-    $qs = $_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] . '&saved=1' : '?saved=1';
+    $qs = !empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] . '&saved=1' : '?saved=1';
     header('Location: admin.php' . $qs);
     exit;
 }
