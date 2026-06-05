@@ -275,6 +275,20 @@ button:hover, .btn:hover, .btn-lg:hover, .btn-mini:hover { background: var(--acc
 
 input, select, textarea { border-radius: 10px; }
 
+/* --- Вкладки админки --- */
+.admin-tabs { display: flex; gap: 4px; align-items: center; border-bottom: 1px solid var(--border, #e3e7ed); margin-bottom: 18px; }
+.admin-tabs a { padding: 10px 16px; text-decoration: none; color: var(--muted, #5b6472); font-weight: 600; border-bottom: 2px solid transparent; }
+.admin-tabs a:hover { color: var(--text, #0f172a); }
+.admin-tabs a.active { color: var(--accent, #2563eb); border-bottom-color: var(--accent, #2563eb); }
+.admin-tabs a.right { margin-left: auto; color: var(--muted, #5b6472); font-weight: 500; }
+
+/* --- Строка редактирования курса (CRUD) --- */
+.course-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.course-row input[type="text"] { min-width: 240px; flex: 1; }
+.course-row .inline { white-space: nowrap; }
+.btn-danger { background: #dc2626 !important; }
+.btn-danger:hover { background: #b91c1c !important; }
+
 /* --- Кнопка/блок «Оставить отзыв» --- */
 .reviews-cta { text-align: center; margin-top: 28px; }
 .reviews-cta p { margin: 10px 0 0; }

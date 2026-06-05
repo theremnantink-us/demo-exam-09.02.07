@@ -58,9 +58,14 @@ function page_link(int $p): string {
 
 layout_header('Заявки — администратор', '🛠', 'Меняйте статус заявок. Доступны фильтр, поиск и пагинация.');
 ?>
+<!-- Вкладки админки -->
+<div class="admin-tabs">
+    <a href="admin.php" class="active">Заявки</a>
+    <a href="admin_courses.php">Курсы</a>
+    <a href="admin_logout.php" class="right">Выйти</a>
+</div>
 <div class="row-between" style="margin-bottom:14px">
     <span class="muted">Найдено: <?= $total ?></span>
-    <a href="admin_logout.php">Выйти</a>
 </div>
 
 <?php if (isset($_GET['saved'])): ?><div class="toast" data-toast>Статус заявки обновлён</div><?php endif; ?>
